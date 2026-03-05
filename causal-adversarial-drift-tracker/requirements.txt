@@ -1,0 +1,6 @@
+networkx
+pydantic
+numpy
+asyncio
+plotly
+scikit-learn
