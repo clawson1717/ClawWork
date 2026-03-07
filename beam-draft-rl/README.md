@@ -15,29 +15,29 @@ Combines the precision of verifiable physics rewards (BeamPERL) with the efficie
 
 ## 📅 Roadmap (12 steps)
 
-1. **Project Scaffold** [TODO]
+1. **Project Scaffold** [DONE]
    - Setup directory structure, requirements, and package initialization.
-2. **Physics Environment & Reward Engine** [TODO]
+2. **Physics Environment & Reward Engine** [DONE]
    - Implement `PhysicsEngine` and `VerifiableReward` for mechanics/equilibrium.
-3. **Draft-Thinking Tokenizer & Wrapper** [TODO]
+3. **Draft-Thinking Tokenizer & Wrapper** [DONE]
    - Logic to truncate/compress CoT into "draft-style" with special tokens.
-4. **Uncertainty Sensor** [TODO]
+4. **Uncertainty Sensor** [DONE]
    - DenoiseFlow-style sensing using entropy and semantic consistency.
-5. **PEFT-RL Trainer (LoRA/PPO)** [TODO]
+5. **PEFT-RL Trainer (LoRA/PPO)** [DONE]
    - Core RL training loop with LoRA and PPO.
-6. **Step-wise Drafting Curriculum** [TODO]
+6. **Step-wise Drafting Curriculum** [DONE]
    - Curriculum stages from Full CoT to Pure Draft based on mastery.
-7. **Regulator & Corrector** [TODO]
+7. **Regulator & Corrector** [DONE]
    - Sensing-Regulating-Correcting loop for fine-grained RL feedback.
-8. **Dataset Preparation (Beam Mechanics)** [TODO]
+8. **Dataset Preparation (Beam Mechanics)** [DONE]
    - Generate problem/solution pairs (forces, moments, stress).
-9. **Benchmark Suite** [TODO]
+9. **Benchmark Suite** [DONE]
    - Accuracy vs. Efficiency metrics and comparison to baseline RL.
-10. **CLI Interface** [TODO]
+10. **CLI Interface** [DONE]
     - Commands: `train`, `evaluate`, `visualize-drafts`, `solve`.
-11. **Integration Tests** [TODO]
+11. **Integration Tests** [DONE]
     - End-to-end verification (Problem → Draft → Verifiable Success).
-12. **Documentation & Demo** [TODO]
+12. **Documentation & Demo** [DONE]
     - Final README and "Drafting vs Traditional CoT" token savings demo.
 
 ---
