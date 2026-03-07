@@ -1,0 +1,7 @@
+agent:
+  name: "AdversarialWebAgent"
+  version: "0.1.0"
+  capabilities:
+    - web-browsing
+    - adversarial-defense
+    - trajectory-pruning
