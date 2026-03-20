@@ -341,6 +341,100 @@ class TestEdgeCases:
         assert torch.all(dRdt < 0)
 
 
+class TestStableEquilibrium:
+    """Test suite for stable equilibrium at baseline."""
+    
+    def test_baseline_is_equilibrium(self):
+        """Test that at R = baseline, dR/dt ≈ 0 (stable equilibrium)."""
+        dynamics = ODEReasoningDynamics(
+            state_dim=4,
+            baseline=0.0,
+            growth_rate=0.5,
+            decay_rate=1.0,
+            uncertainty_scale=2.0,
+        )
+        dynamics.set_uncertainty(0.1)  # Low uncertainty
+        
+        R = torch.tensor([0.0, 0.0, 0.0, 0.0])  # At baseline
+        t = torch.tensor(0.0)
+        dRdt = dynamics.dynamics(t, R)
+        
+        # At baseline, dR/dt should be approximately 0
+        assert torch.allclose(dRdt, torch.zeros(4), atol=1e-5)
+    
+    def test_baseline_is_equilibrium_nonzero_baseline(self):
+        """Test that at R = baseline (non-zero), dR/dt ≈ 0."""
+        dynamics = ODEReasoningDynamics(
+            state_dim=4,
+            baseline=0.5,
+            growth_rate=0.5,
+            decay_rate=1.0,
+            uncertainty_scale=2.0,
+        )
+        dynamics.set_uncertainty(0.1)  # Low uncertainty
+        
+        R = torch.tensor([0.5, 0.5, 0.5, 0.5])  # At baseline
+        t = torch.tensor(0.0)
+        dRdt = dynamics.dynamics(t, R)
+        
+        # At baseline, dR/dt should be approximately 0
+        assert torch.allclose(dRdt, torch.zeros(4), atol=1e-5)
+    
+    def test_r_above_baseline_pushes_down(self):
+        """Test that for R > baseline, dR/dt < 0 (restoring force)."""
+        dynamics = ODEReasoningDynamics(
+            state_dim=4,
+            baseline=0.0,
+            growth_rate=0.5,
+            decay_rate=1.0,
+            uncertainty_scale=2.0,
+        )
+        dynamics.set_uncertainty(0.1)  # Low uncertainty
+        
+        R = torch.tensor([0.5, 0.5, 0.5, 0.5])  # Above baseline
+        t = torch.tensor(0.0)
+        dRdt = dynamics.dynamics(t, R)
+        
+        # Above baseline, dR/dt should be negative (pushing down)
+        assert torch.all(dRdt < 0)
+    
+    def test_r_below_baseline_pushes_up(self):
+        """Test that for R < baseline, dR/dt > 0 (restoring force)."""
+        dynamics = ODEReasoningDynamics(
+            state_dim=4,
+            baseline=0.0,
+            growth_rate=0.5,
+            decay_rate=1.0,
+            uncertainty_scale=2.0,
+        )
+        dynamics.set_uncertainty(0.1)  # Low uncertainty
+        
+        R = torch.tensor([-0.5, -0.5, -0.5, -0.5])  # Below baseline
+        t = torch.tensor(0.0)
+        dRdt = dynamics.dynamics(t, R)
+        
+        # Below baseline, dR/dt should be positive (pushing up)
+        assert torch.all(dRdt > 0)
+    
+    def test_high_uncertainty_decay_dominates(self):
+        """Test that high uncertainty causes decay dynamics."""
+        dynamics = ODEReasoningDynamics(
+            state_dim=4,
+            baseline=0.0,
+            growth_rate=0.5,
+            decay_rate=1.0,
+            uncertainty_scale=2.0,
+        )
+        dynamics.set_uncertainty(0.9)  # High uncertainty
+        
+        R = torch.tensor([0.3, 0.3, 0.3, 0.3])
+        t = torch.tensor(0.0)
+        dRdt = dynamics.dynamics(t, R)
+        
+        # With high uncertainty, decay should dominate
+        assert torch.all(dRdt < 0)
+
+
 class TestReasoningODEOutput:
     """Test ReasoningODEOutput dataclass."""
     

@@ -107,13 +107,15 @@ class ODEReasoningDynamics(nn.Module):
         # 1. Restoring force toward baseline ( Hooke's law )
         restoring = -self.decay_rate * deviation
         
-        # 2. Growth component - positive feedback that drives growth
+        # 2. Growth component - proportional to deviation
         # This is modulated by inverse uncertainty (low uncertainty = more growth)
+        # Growth vanishes at baseline (deviation = 0)
         uncertainty_factor = torch.exp(-self.uncertainty_scale * U)
-        growth = self.growth_rate * uncertainty_factor * (1.0 - torch.abs(deviation))
+        growth = self.growth_rate * uncertainty_factor * deviation
         
         # 3. Oscillation component - high uncertainty causes oscillation
-        oscillation = self.oscillation_freq * torch.sin(R)
+        # Oscillation is relative to baseline so it vanishes at baseline
+        oscillation = self.oscillation_freq * torch.sin(deviation)
         
         # Combine: dR/dt = restoring + growth - oscillation*damping
         damping = self.uncertainty_scale * U
